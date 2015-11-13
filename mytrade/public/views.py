@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Public section, including homepage and signup."""
-from flask import (Blueprint, request, render_template, flash, url_for,
-                    redirect, session)
+from flask import (Blueprint, request, render_template, flash, url_for, redirect)
 from flask_login import login_user, login_required, logout_user
 
 from mytrade.extensions import login_manager
@@ -9,10 +8,9 @@ from mytrade.user.models import User
 from mytrade.public.forms import LoginForm
 from mytrade.user.forms import RegisterForm
 from mytrade.utils import flash_errors
-from mytrade.database import db
+#from mytrade.database import db
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
-
 
 @login_manager.user_loader
 def load_user(id):

@@ -18,24 +18,23 @@ from .forms import (
     UnitForm,
 )
 
+blueprint = Blueprint("setup", __name__, url_prefix='/setup',
+                      static_folder="../static",
+                      template_folder="../templates/setup")
 
-setup = Blueprint("setup", __name__, url_prefix='/setup',
-                      static_folder="../static")
-
-
-@setup.route("/")
+@blueprint.route("/")
 @login_required
 def setup():
     return render_template("user/members.html")
 
-@setup.route('/units', methods=['GET'])
+@blueprint.route('/units', methods=['GET'])
 @login_required
 def units():
     """Unit Query"""
     units = Unit.query.all()
     return render_template('units.html', units=units)
 
-@setup.route('/unit_add', methods=['POST'])
+@blueprint.route('/unit_add', methods=['POST'])
 @login_required
 def unit_add():
     """Unit Add"""
@@ -51,7 +50,7 @@ def unit_add():
     return render_template('unit_add.html', unitform=unitform,
         return_url=return_url)
 
-@setup.route('/unit_edit/<unit_id>', methods=['GET', 'POST'])
+@blueprint.route('/unit_edit/<unit_id>', methods=['GET', 'POST'])
 @login_required
 def unit_edit(unit_id):
     """Unit Edit"""
@@ -74,7 +73,7 @@ def unit_edit(unit_id):
     return render_template('unit_edit.html', unitform=unitform,
         return_url=return_url)
 
-@setup.route('/unit_delete/<unit_id>', methods=['POST'])
+@blueprint.route('/unit_delete/<unit_id>', methods=['POST'])
 @login_required
 def unit_delete(unit_id):
     """Unit Delete"""
