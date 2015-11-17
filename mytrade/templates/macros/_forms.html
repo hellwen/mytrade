@@ -1,0 +1,75 @@
+{% macro render_errors(field) %}
+    {% if field.errors %}
+        <ul class="alert alert-danger" role="alert">
+        {% for e in field.errors if e is string %}
+            <li>{{ e }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_tips(field) %}
+    {% if field.description %}
+        <span class="tips">{{ field.description }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_form_buttons(cancel_url, extra=None) %}
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-large" value="{{ _('Submit') }}" />
+        {% if extra %}
+            {{ extra }}
+        {% endif %}
+        {% if cancel_url %}
+            <a href="{{ cancel_url }}" class="btn btn-large">{{ _('Cancel') }}</a>
+        {% endif %}
+      </div>
+    </div>
+{% endmacro %}
+
+{% macro render_field(field, set_required=False, set_focus=False, kwargs={}) %}
+    <div class="form-group">
+        {% if field.type == "BooleanField" %}
+            <label></label>
+        {% else %}
+            {{ field.label }}
+            {% if field.flags.required %}
+                <strong style="color: red">&#42;</strong>
+            {% endif %}
+        {% endif %}
+
+        {% if field.type == "BooleanField" %}
+            {% if set_focus %}
+                <div class="checkbox">
+                    {{ field(autofocus='autofocus', **kwargs)|safe }}{{ field.label }}
+                </div>
+            {% else %}
+                <div class="checkbox">
+                    {{ field(**kwargs)|safe }}{{ field.label }}
+                </div>
+            {% endif %}
+        {% else %}
+            {% if set_focus %}
+                 {{ field(class_='form-control', autofocus='autofocus', **kwargs)|safe }}
+            {% else %}
+                 {{ field(class_='form-control', **kwargs)|safe }}
+            {% endif %}
+        {% endif %}
+   
+
+        {% if field.description %}
+            <p class="help-block">{{ field.description }}</p>
+        {% endif %}
+
+        {{ render_errors(field) }}
+    </div>
+{% endmacro %}
+
+{% macro form_tag(form) %}
+    <form action="" method="POST">
+        {{ form.hidden_tag() if form.hidden_tag is defined }}
+        <div class="container-fluid">
+        {{ caller() }}
+        </div>
+    </form>
+{% endmacro %}
