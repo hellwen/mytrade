@@ -10,8 +10,12 @@ from mytrade.user.models import User
 from mytrade.settings import DevConfig, ProdConfig
 from mytrade.database import db
 
+
 if os.environ.get("MYTRADE_ENV") == 'prod':
     app = create_app(ProdConfig)
+
+    if os.environ.get("DATABASE_URL") != '':
+        ProdConfig.SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 else:
     app = create_app(DevConfig)
 
