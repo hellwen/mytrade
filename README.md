@@ -15,3 +15,15 @@
     pip install -r requirements.txt
     
     python manage.py runserver
+
+
+## Heroku 
+
+
+    heroku config:set MYTRADE_ENV=prod
+    
+    heroku run python manage.py db upgrade
+    
+    heroku pg:psql --app mytrade DATABASE
+    
+    
