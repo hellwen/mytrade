@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_wtf import Form
-from wtforms import TextField, IntegerField, BooleanField
+from wtforms import TextField, IntegerField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length
 
 from .models import Unit, Item_Group, Company
@@ -33,6 +33,9 @@ class Item_GroupForm(Form):
     id = IntegerField()
     item_group_name = TextField(_('Item Group'),
                     validators=[DataRequired(), Length(max=80)])
+
+    parent_id = SelectField(_('Parent'), default=0, coerce=int)
+    
     is_group = BooleanField(_('Is Group?'),
                     default="checked")
 

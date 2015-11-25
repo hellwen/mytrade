@@ -5,7 +5,7 @@ from mytrade.database import (
     db,
     Model,
 #    ReferenceCol,
-#    relationship,
+    relationship,
     SurrogatePK,
 )
 
@@ -22,12 +22,15 @@ class Unit(SurrogatePK, Model):
     def __repr__(self):
         return '<Unit({name})>'.format(name=self.unit_name)
 
-class Item_Group(SurrogatePK, Model):
+class Item_Group(Model):
 
     __tablename__ = 'item_groups'
+
+    id = db.Column(db.Integer, primary_key=True)
+
     item_group_name = Column(db.String(80), unique=True, nullable=False)
-    #parent_item_group_id = ReferenceCol('item_groups')
-    #parent_item_group = relationship('Item_Group', backref='item_groups')
+    parent_id = Column(db.Integer, db.ForeignKey('item_groups.id'))
+    parent = relationship('Item_Group', remote_side=[id])
 
     # Only leaf nodes are allowed in transaction
     is_group = Column(db.Boolean, default=False)

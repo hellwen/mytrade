@@ -117,7 +117,12 @@ def item_group_add():
     """Item Group Add"""
     return_url = request.args.get('next', url_for(".item_groups"))
     model = Item_Group('')
+    item_group_choices = [(r.id, r.item_group_name) for r in Item_Group.query.filter_by().order_by('item_group_name')]
+
     form = Item_GroupForm(next=return_url)
+    for subfield in form.admin_group_contacts:
+        subfield.form.parent_id.choices = item_group_choices
+
     if form.validate_on_submit():
         try:
             form.populate_obj(model)

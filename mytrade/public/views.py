@@ -54,7 +54,7 @@ def register():
                         email=form.email.data,
                         password=form.password.data,
                         active=True)
-        flash(_("Thank you for registering. You can now log in.", 'success'))
+        flash(_("Thank you for registering. You can now log in."), 'success')
         return redirect(url_for('public.home'))
     else:
         flash_errors(form)
