@@ -4,8 +4,8 @@ from mytrade.database import (
     Column,
     db,
     Model,
-    ReferenceCol,
-    relationship,
+#    ReferenceCol,
+#    relationship,
     SurrogatePK,
 )
 
@@ -42,6 +42,9 @@ class Company(SurrogatePK, Model):
     
     __tablename__ = 'companys'
     company_name = Column(db.String(80), unique=True, nullable=False)
+
+    def __init__(self, company_name, **kwargs):
+        db.Model.__init__(self, company_name=company_name, **kwargs)
 
     def __repr__(self):
         return '<Company({name})'.format(name=self.company_name)

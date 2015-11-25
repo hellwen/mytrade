@@ -9,13 +9,13 @@
   <li class="active"><a href="#">{{ _('Create') }}</a></li>
 </ul>
 
-    {% call _forms.form_tag(form=unitform) %}
+    {% call _forms.form_tag(form=form) %}
         <div class="row">
-            <div class="col-xs-6 col-sm-3">{{ _forms.render_field(unitform.unit_name) }}</div>
+            <div class="col-xs-6 col-sm-3">{{ _forms.render_field(form.unit_name) }}</div>
         </div>
 
         <div class="row">
-            <div class="col-xs-6 col-sm-3">{{ _forms.render_field(unitform.must_be_whole_number) }}</div>
+            <div class="col-xs-6 col-sm-3">{{ _forms.render_field(form.must_be_whole_number) }}</div>
         </div>
         <div class="row">
             <div class="col-xs-12 col-sm-10">{{ _forms.render_form_buttons(return_url) }}</div>

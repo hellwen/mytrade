@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
-from flask import Flask, render_template
+from flask import Flask
 
 from mytrade.settings import ProdConfig
 from mytrade.assets import assets
@@ -13,6 +13,7 @@ from mytrade.extensions import (
     debug_toolbar,
 )
 from mytrade import public, user, setup
+from mytrade.utils import render
 
 
 def create_app(config_object=ProdConfig):
@@ -51,7 +52,7 @@ def register_errorhandlers(app):
     def render_error(error):
         # If a HTTPException, pull the `code` attribute; default to 500
         error_code = getattr(error, 'code', 500)
-        return render_template("{0}.html".format(error_code)), error_code
+        return render("{0}.html".format(error_code)), error_code
     for errcode in [401, 404, 500]:
         app.errorhandler(errcode)(render_error)
     return None
