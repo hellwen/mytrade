@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
-os_env = os.environ
-
-
 class Config(object):
-    SECRET_KEY = os_env.get('MYTRADE_SECRET', 'secret-key')  # TODO: Change me
+    SECRET_KEY = os.environ.get('MYTRADE_SECRET', 'secret-key')  # TODO: Change me
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     BCRYPT_LOG_ROUNDS = 13
@@ -19,7 +16,8 @@ class ProdConfig(Config):
     """Production configuration."""
     ENV = 'prod'
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgres://dahebaaijmvoit:SuW5nMaqqN-qZ-RSjLtVBmJpEC@ec2-54-225-192-128.compute-1.amazonaws.com:5432/dfu098bqnu8kig'
+    #SQLALCHEMY_DATABASE_URI = 'postgres://dahebaaijmvoit:SuW5nMaqqN-qZ-RSjLtVBmJpEC@ec2-54-225-192-128.compute-1.amazonaws.com:5432/dfu098bqnu8kig'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     DEBUG_TB_ENABLED = False
 
 
@@ -34,8 +32,6 @@ class DevConfig(Config):
     DEBUG_TB_ENABLED = True
     ASSETS_DEBUG = True  # Don't bundle/minify static assets
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
-
-    SECRET_KEY = "12345678"
 
 
 class TestConfig(Config):
