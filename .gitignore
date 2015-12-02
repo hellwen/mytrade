@@ -2,6 +2,7 @@
 
 # db
 *.db
+dev.db
 
 # C extensions
 *.so
