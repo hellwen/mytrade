@@ -10,12 +10,12 @@ from flask_login import login_required
 
 from .models import (
     Unit,
-    Item_Group,
+    ItemGroup,
     Company,
 )
 from .forms import (
     UnitForm,
-    Item_GroupForm,
+    ItemGroupForm,
     CompanyForm
 )
 from mytrade.extensions import (
@@ -30,10 +30,6 @@ blueprint = Blueprint("setup", __name__, url_prefix='/setup',
                       static_folder="../static",
                       template_folder="../templates/setup")
 
-@blueprint.route("/")
-@login_required
-def setup():
-    return render("user/members.html")
 
 @blueprint.route('/units', methods=['GET'])
 @login_required
@@ -44,10 +40,10 @@ def units():
     models = Unit.query.all()
     return render('units.html', models=models, return_url=return_url)
 
-@blueprint.route('/unit/add', methods=['POST', 'GET'])
+@blueprint.route('/unit/create', methods=['POST', 'GET'])
 @login_required
-def unit_add():
-    """Unit Add"""
+def unit_create():
+    """Unit Create"""
     return_url = request.args.get('next', url_for(".units"))
     model = Unit('')
     form = UnitForm(next=return_url)
@@ -58,14 +54,14 @@ def unit_add():
             db.session.commit()
             if '_add_another' in request.form:
                 flash(_('Created successfully.'))
-                return redirect(url_for('.unit_add', url=return_url))
+                return redirect(url_for('.unit_create', url=return_url))
             else:
                 return redirect(return_url)
         except Exception, ex:
             db.session.rollback()
-            flash(_('Failed to update model. %(error)s',  error=str(ex    )), 'danger')
+            flash(_('Failed to update model.') + '%(error)s' % {'error':str(ex)}, 'danger')
 
-    return render('unit_add.html', form=form,
+    return render('unit_create.html', form=form,
         return_url=return_url)
 
 @blueprint.route('/unit/edit/id=<int:id>', methods=['GET', 'POST'])
@@ -108,20 +104,18 @@ def item_groups():
     """Item Group Query"""
     return_url = request.args.get('next', url_for(".item_groups"))
 
-    models = Item_Group.query.all()
+    models = ItemGroup.query.all()
     return render('item_groups.html', models=models, return_url=return_url)
 
-@blueprint.route('/item_group/add', methods=['POST', 'GET'])
+@blueprint.route('/item_group/create', methods=['POST', 'GET'])
 @login_required
-def item_group_add():
-    """Item Group Add"""
+def item_group_create():
+    """Item Group Create"""
     return_url = request.args.get('next', url_for(".item_groups"))
-    model = Item_Group('')
-    item_group_choices = [(r.id, r.item_group_name) for r in Item_Group.query.filter_by().order_by('item_group_name')]
+    model = ItemGroup('')
 
-    form = Item_GroupForm(next=return_url)
-    for subfield in form.admin_group_contacts:
-        subfield.form.parent_id.choices = item_group_choices
+    form = ItemGroupForm(next=return_url)
+    form.parent_id.choices = [(r.id, r.item_group_name) for r in ItemGroup.query.filter_by().order_by('item_group_name')]
 
     if form.validate_on_submit():
         try:
@@ -130,27 +124,29 @@ def item_group_add():
             db.session.commit()
             if '_add_another' in request.form:
                 flash(_('Created successfully.'))
-                return redirect(url_for('.item_group_add', url=return_url))
+                return redirect(url_for('.item_group_create', url=return_url))
             else:
                 return redirect(return_url)
         except Exception, ex:
             db.session.rollback()
-            flash(_('Failed to update model. %(error)s',  error=str(ex    )), 'danger')
+            flash(_('Failed to update model.') + '%(error)s' % {'error':str(ex)}, 'danger')
 
-    return render('item_group_add.html', form=form,
+    return render('item_group_create.html', form=form,
         return_url=return_url)
 
 @blueprint.route('/item_group/edit/id=<int:id>', methods=['GET', 'POST'])
 @login_required
 def item_group_edit(id):
-    """Unit Edit"""
+    """Item Group Edit"""
     return_url = request.args.get('next', url_for(".item_groups"))
-    model = Item_Group.query.get(id)
+    model = ItemGroup.query.get(id)
 
     if model is None:
         return redirect(return_url)
 
-    form = Item_GroupForm(obj=model, next=return_url)
+    form = ItemGroupForm(obj=model, next=return_url)
+    form.parent_id.choices = [(r.id, r.item_group_name) for r in ItemGroup.query.filter_by().order_by('item_group_name')]
+
     if form.validate_on_submit():
         try:
             form.populate_obj(model)
@@ -168,7 +164,7 @@ def item_group_edit(id):
 def item_group_delete(id):
     """Item Group Delete"""
     return_url = request.args.get('next', url_for(".item_groups"))
-    model = Item_Group.query.get(id)
+    model = ItemGroup.query.get(id)
 
     if model:
         model.delete()
@@ -183,10 +179,10 @@ def companies():
     models = Company.query.all()
     return render('companies.html', models=models, return_url=return_url)
 
-@blueprint.route('/company/add', methods=['POST', 'GET'])
+@blueprint.route('/company/create', methods=['POST', 'GET'])
 @login_required
-def company_add():
-    """Company Add"""
+def company_create():
+    """Company Create"""
     return_url = request.args.get('next', url_for(".companies"))
     model = Company('')
     form = CompanyForm(next=return_url)
@@ -197,20 +193,20 @@ def company_add():
             db.session.commit()
             if '_add_another' in request.form:
                 flash(_('Created successfully.'))
-                return redirect(url_for('.company_add', url=return_url))
+                return redirect(url_for('.company_create', url=return_url))
             else:
                 return redirect(return_url)
         except Exception, ex:
             db.session.rollback()
-            flash(_('Failed to update model. %(error)s',  error=str(ex    )), 'danger')
+            flash(_('Failed to update model.') + '%(error)s' % {'error':str(ex)}, 'danger')
 
-    return render('company_add.html', form=form,
+    return render('company_create.html', form=form,
         return_url=return_url)
 
 @blueprint.route('/company/edit/id=<int:id>', methods=['GET', 'POST'])
 @login_required
 def company_edit(id):
-    """Unit Edit"""
+    """Company Edit"""
     return_url = request.args.get('next', url_for(".companies"))
     model = Company.query.get(id)
 
@@ -233,7 +229,7 @@ def company_edit(id):
 @blueprint.route('/company/delete/id=<int:id>', methods=['POST'])
 @login_required
 def company_delete(id):
-    """Item Group Delete"""
+    """Company Delete"""
     return_url = request.args.get('next', url_for(".companies"))
     model = Company.query.get(id)
 

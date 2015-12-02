@@ -1,25 +1,20 @@
 {% extends "model.html" %}
 
-{% import 'macros/_forms.html' as _forms with context %}
+{% import 'lib.html' as lib with context %}
 
 {% block content %}
 
 <ul class="nav nav-tabs" role="tablist">
   <li><a href="{{ url_for('setup.units') }}">{{ _('List') }}</a></li>
+  <li><a href="{{ url_for('setup.unit_create') }}">{{ _('Create') }}</a></li>
   <li class="active"><a href="#">{{ _('Edit') }}</a></li>
 </ul>
 
-    {% call _forms.form_tag(form=form) %}
-        <div class="row">
-            <div class="col-xs-6 col-sm-3">{{ _forms.render_field(form.unit_name) }}</div>
-        </div>
+    {% call lib.form_tag() %}
+        {{ lib.render_field(form.unit_name) }}
+        {{ lib.render_field(form.must_be_whole_number) }}
 
-        <div class="row">
-            <div class="col-xs-6 col-sm-3">{{ _forms.render_field(form.must_be_whole_number) }}</div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-10">{{ _forms.render_form_buttons(return_url) }}</div>
-        </div>
+        {{ lib.render_form_buttons(return_url) }}
     {% endcall %}
 
 {% endblock %}

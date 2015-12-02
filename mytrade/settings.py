@@ -35,6 +35,8 @@ class DevConfig(Config):
     ASSETS_DEBUG = True  # Don't bundle/minify static assets
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
 
+    SECRET_KEY = "12345678"
+
 
 class TestConfig(Config):
     TESTING = True

@@ -1,35 +1,72 @@
 # -*- coding: utf-8 -*-
 from flask_wtf import Form
-from wtforms import TextField, PasswordField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms import TextField, BooleanField, IntegerField
+from wtforms.validators import DataRequired, Length
 
-from .models import User
+from .models import Warehouse, Item
 
+from mytrade.form.fields import Select2Field
+from mytrade.utils import _
 
-class RegisterForm(Form):
-    username = TextField('Username',
-                    validators=[DataRequired(), Length(min=3, max=25)])
-    email = TextField('Email',
-                    validators=[DataRequired(), Email(), Length(min=6, max=40)])
-    password = PasswordField('Password',
-                                validators=[DataRequired(), Length(min=6, max=40)])
-    confirm = PasswordField('Verify password',
-                [DataRequired(), EqualTo('password', message='Passwords must match')])
+class WarehouseForm(Form):
+    id = IntegerField()
+
+    warehouse_name = TextField(_('Warehouse Name'),
+                 validators=[DataRequired(), Length(max=25)])
+
+    company_id = Select2Field(_('Company'), default=0, coerce=int)
+
+    address1 = TextField(_('Address1'))
+    address2 = TextField(_('Address2'))
+
+    disabled = BooleanField(_('Disabled'))
 
     def __init__(self, *args, **kwargs):
-        super(RegisterForm, self).__init__(*args, **kwargs)
-        self.user = None
+        super(WarehouseForm, self).__init__(*args, **kwargs)
 
     def validate(self):
-        initial_validation = super(RegisterForm, self).validate()
+        initial_validation = super(WarehouseForm, self).validate()
         if not initial_validation:
             return False
-        user = User.query.filter_by(username=self.username.data).first()
-        if user:
-            self.username.errors.append("Username already registered")
-            return False
-        user = User.query.filter_by(email=self.email.data).first()
-        if user:
-            self.email.errors.append("Email already registered")
+
+        warehouse = Warehouse.query.filter(Warehouse.warehouse_name==self.warehouse_name.data, Warehouse.id != self.id.data).first()
+        if warehouse:
+            self.warehouse_name.errors.append(_("Warehouse Name already existed"))
             return False
         return True
+
+
+class ItemForm(Form):
+    id = IntegerField()
+
+    item_code = TextField(_('Item Code'),
+                 validators=[DataRequired(), Length(min=3, max=25)])
+    item_name = TextField(_('Item Name'),
+                 validators=[DataRequired(), Length(max=25)])
+
+    item_group_id = Select2Field(_('Item Group'), default=0, coerce=int)
+    default_unit_id = Select2Field(_('Default Unit'), default=0, coerce=int)
+    default_warehouse_id = Select2Field(_('Default Warehouse'), default=0, coerce=int)
+
+    description = TextField(_('Description'))
+
+    def __init__(self, *args, **kwargs):
+        super(ItemForm, self).__init__(*args, **kwargs)
+
+    def validate(self):
+        initial_validation = super(ItemForm, self).validate()
+        if not initial_validation:
+            return False
+
+        item = Item.query.filter(Item.item_code==self.item_code.data, Item.id != self.id.data).first()
+        if item:
+            self.item_code.errors.append(_("Item Code already existed"))
+            return False
+
+        item = Item.query.filter(Item.item_name==self.item_name.data, Item.id != self.id.data).first()
+        if item:
+            self.item_name.errors.append(_("Item Name already existed"))
+            return False
+
+        return True
+

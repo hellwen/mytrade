@@ -1,25 +1,23 @@
 {% extends "model.html" %}
 
-{% import 'macros/_forms.html' as _forms with context %}
+{% import 'lib.html' as lib with context %}
 
 {% block content %}
 
 <ul class="nav nav-tabs" role="tablist">
   <li><a href="{{ url_for('setup.item_groups') }}">{{ _('List') }}</a></li>
+  <li><a href="{{ url_for('setup.item_group_create') }}">{{ _('Create') }}</a></li>
   <li class="active"><a href="#">{{ _('Edit') }}</a></li>
 </ul>
 
-    {% call _forms.form_tag(form=form) %}
-        <div class="row">
-            <div class="col-xs-6 col-sm-3">{{ _forms.render_field(form.item_group_name) }}</div>
-        </div>
+    {% call lib.form_tag() %}
 
-        <div class="row">
-            <div class="col-xs-6 col-sm-3">{{ _forms.render_field(form.is_group) }}</div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-10">{{ _forms.render_form_buttons(return_url) }}</div>
-        </div>
+        {{ lib.render_field(form.item_group_name) }}
+        {{ lib.render_field(form.parent_id) }}
+        {{ lib.render_field(form.is_group) }}
+
+        {{ lib.render_form_buttons(cancel_url=return_url) }}       
+
     {% endcall %}
 
 {% endblock %}

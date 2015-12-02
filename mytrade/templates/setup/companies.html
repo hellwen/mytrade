@@ -4,7 +4,7 @@
 
 <ul class="nav nav-tabs" role="tablist">
   <li class="active"><a href="{{ url_for('setup.companies') }}">{{ _('List') }}</a></li>
-  <li><a href="{{ url_for('setup.company_add') }}">{{ _('Create') }}</a></li>
+  <li><a href="{{ url_for('setup.company_create') }}">{{ _('Create') }}</a></li>
 </ul>
 
     {% block model_list_table %}
@@ -28,11 +28,6 @@
             </td>
 
             <td>{{ row.company_name }}</td>
-            {% if row.must_be_whole_number %}
-                <td><span class="glyphicon glyphicon-ok"></span></td>
-            {% else %}
-                 <td><span class="glyphicon glyphicon-remove"></span></td>
-            {% endif %}
         </tr>
         {% endfor %}
     </table>

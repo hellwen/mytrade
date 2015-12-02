@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from flask_wtf import Form
-from wtforms import TextField, IntegerField, BooleanField, SelectField
-from wtforms.validators import DataRequired, Length
+from wtforms import TextField, IntegerField, BooleanField
+from wtforms.validators import DataRequired, Length, required
 
-from .models import Unit, Item_Group, Company
+from .models import Unit, ItemGroup, Company
 
+from mytrade.form.fields import Select2Field
 from mytrade.utils import _
+
 
 class UnitForm(Form):
     id = IntegerField()
@@ -29,26 +31,26 @@ class UnitForm(Form):
             return False
         return True
 
-class Item_GroupForm(Form):
+class ItemGroupForm(Form):
     id = IntegerField()
     item_group_name = TextField(_('Item Group'),
                     validators=[DataRequired(), Length(max=80)])
 
-    parent_id = SelectField(_('Parent'), default=0, coerce=int)
-    
+    parent_id = Select2Field(_('Parent'), default=0, coerce=int)
+
     is_group = BooleanField(_('Is Group?'),
                     default="checked")
 
     def __init__(self, *args, **kwargs):
-        super(Item_GroupForm, self).__init__(*args, **kwargs)
+        super(ItemGroupForm, self).__init__(*args, **kwargs)
         self.item_group = None
 
     def validate(self):
-        initial_validation = super(Item_GroupForm, self).validate()
+        initial_validation = super(ItemGroupForm, self).validate()
         if not initial_validation:
             return False
 
-        item_group = Item_Group.query.filter(Item_Group.item_group_name==self.item_group_name.data, Item_Group.id != self.id.data).first()
+        item_group = ItemGroup.query.filter(ItemGroup.item_group_name==self.item_group_name.data, ItemGroup.id != self.id.data).first()
         if item_group:
             self.item_group_name.errors.append(_("Item Group Name already existed"))
             return False

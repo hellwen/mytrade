@@ -14,15 +14,18 @@ class Unit(SurrogatePK, Model):
 
     __tablename__ = 'units'
     unit_name = Column(db.String(80), unique=True, nullable=False)
-    must_be_whole_number = Column(db.Boolean, default=False)
+    must_be_whole_number = Column(db.Boolean, default=True)
 
     def __init__(self, unit_name, **kwargs):
         db.Model.__init__(self, unit_name=unit_name, **kwargs)
 
-    def __repr__(self):
-        return '<Unit({name})>'.format(name=self.unit_name)
+    def __str__(self):
+        return u'{name}'.format(name=self.unit_name)
 
-class Item_Group(Model):
+    def __repr__(self):
+        return u'<Unit({name})>'.format(name=self.unit_name)
+
+class ItemGroup(Model):
 
     __tablename__ = 'item_groups'
 
@@ -30,7 +33,7 @@ class Item_Group(Model):
 
     item_group_name = Column(db.String(80), unique=True, nullable=False)
     parent_id = Column(db.Integer, db.ForeignKey('item_groups.id'))
-    parent = relationship('Item_Group', remote_side=[id])
+    parent = relationship('ItemGroup', remote_side=[id])
 
     # Only leaf nodes are allowed in transaction
     is_group = Column(db.Boolean, default=False)
@@ -38,17 +41,23 @@ class Item_Group(Model):
     def __init__(self, item_group_name, **kwargs):
         db.Model.__init__(self, item_group_name=item_group_name, **kwargs)
 
+    def __str__(self):
+        return u'{name}'.format(name=self.item_group_name)
+
     def __repr__(self):
-        return '<Item Group({name})>'.format(name=self.item_group_name)
+        return u'<Item Group({name})>'.format(name=self.item_group_name)
 
 class Company(SurrogatePK, Model):
     
-    __tablename__ = 'companys'
+    __tablename__ = 'companies'
     company_name = Column(db.String(80), unique=True, nullable=False)
 
     def __init__(self, company_name, **kwargs):
         db.Model.__init__(self, company_name=company_name, **kwargs)
 
+    def __str__(self):
+        return u'{name}'.format(name=self.company_name)
+
     def __repr__(self):
-        return '<Company({name})'.format(name=self.company_name)
+        return u'<Company({name})'.format(name=self.company_name)
 

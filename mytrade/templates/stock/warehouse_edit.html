@@ -1,0 +1,23 @@
+{% extends "model.html" %}
+
+{% import 'lib.html' as lib with context %}
+
+{% block content %}
+
+<ul class="nav nav-tabs" role="tablist">
+  <li><a href="{{ url_for('stock.warehouses') }}">{{ _('List') }}</a></li>
+  <li><a href="{{ url_for('stock.warehouse_create') }}">{{ _('Create') }}</a></li>
+  <li class="active"><a href="#">{{ _('Edit') }}</a></li>
+</ul>
+
+    {% call lib.form_tag() %}
+        {{ lib.render_field(form.warehouse_name) }}
+        {{ lib.render_field(form.company_id) }}
+        {{ lib.render_field(form.address1) }}
+        {{ lib.render_field(form.address2) }}
+        {{ lib.render_field(form.disabled) }}
+
+        {{ lib.render_form_buttons(return_url) }}
+    {% endcall %}
+
+{% endblock %}

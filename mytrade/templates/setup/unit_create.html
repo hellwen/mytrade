@@ -1,0 +1,19 @@
+{% extends "model.html" %}
+
+{% import 'lib.html' as lib with context %}
+
+{% block content %}
+
+<ul class="nav nav-tabs" role="tablist">
+  <li><a href="{{ url_for('setup.units') }}">{{ _('List') }}</a></li>
+  <li class="active"><a href="#">{{ _('Create') }}</a></li>
+</ul>
+
+    {% call lib.form_tag() %}
+        {{ lib.render_field(form.unit_name) }}
+        {{ lib.render_field(form.must_be_whole_number) }}
+
+        {{ lib.render_form_buttons(return_url) }}
+    {% endcall %}
+
+{% endblock %}

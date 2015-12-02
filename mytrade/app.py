@@ -12,7 +12,12 @@ from mytrade.extensions import (
     migrate,
     debug_toolbar,
 )
-from mytrade import public, user, setup
+from mytrade import (
+    public, 
+    user, 
+    setup, 
+    stock,
+)
 from mytrade.utils import render
 
 
@@ -45,6 +50,7 @@ def register_blueprints(app):
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
     app.register_blueprint(setup.views.blueprint)
+    app.register_blueprint(stock.views.blueprint)
     return None
 
 
