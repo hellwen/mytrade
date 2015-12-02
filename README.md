@@ -22,6 +22,8 @@
 
     heroku config:set MYTRADE_ENV=prod
     
+    heroku config:set MYTRADE_SECRET=12345678
+    
     heroku run python manage.py db upgrade
     
     heroku pg:psql --app mytrade DATABASE
