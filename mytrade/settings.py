@@ -16,7 +16,6 @@ class ProdConfig(Config):
     """Production configuration."""
     ENV = 'prod'
     DEBUG = False
-    #SQLALCHEMY_DATABASE_URI = 'postgres://dahebaaijmvoit:SuW5nMaqqN-qZ-RSjLtVBmJpEC@ec2-54-225-192-128.compute-1.amazonaws.com:5432/dfu098bqnu8kig'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     DEBUG_TB_ENABLED = False
 
