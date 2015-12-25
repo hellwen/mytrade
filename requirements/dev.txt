@@ -8,3 +8,6 @@ factory-boy==2.5.1
 
 # Management script
 Flask-Script
+
+# Nose
+# Sphinx
